@@ -22,7 +22,7 @@ public class FreightCar extends RollingStock {
 		}
 		
 		//Tests valid goods type is entered
-		if(!goodsType.equals("G") && !goodsType.equals("G") && !goodsType.equals("G")){
+		if(!goodsType.equals("G") && !goodsType.equals("R") && !goodsType.equals("D")){
 			throw new TrainException("Goods type must be G, R or D");
 		}
 		

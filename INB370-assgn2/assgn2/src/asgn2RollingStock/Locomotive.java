@@ -14,7 +14,7 @@ public class Locomotive extends RollingStock {
 		// Checks string Length
 		if (classification.length() > 2) {
 			throw new TrainException(
-					"Classification muse be a number between 1 & 9 "
+					"Classification must be a number between 1 & 9 "
 							+ "followed by E, D or S");
 		}
 
@@ -34,7 +34,7 @@ public class Locomotive extends RollingStock {
 																// class to int
 		} catch (NumberFormatException nFE) {
 			throw new TrainException(
-					"First Charactore must be number between 1 & 9");
+					"First Character must be number between 1 & 9");
 		}
 
 		// Checks power is not 0
