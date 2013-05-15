@@ -25,7 +25,7 @@ public class PassengerCar extends RollingStock {
 		//Checks seats is not negative
 		if (numberOfSeats < 0) {
 			throw new TrainException(
-					"Number of seats cant be negitive must be positive");
+					"Number of seats cant be negitive, must be positive");
 		}
 
 		this.passengersOnboard = 0;
@@ -75,7 +75,7 @@ public class PassengerCar extends RollingStock {
 		//Tests more passengers the on the train can be unboarded
 		if (departingPassenger > this.passengersOnboard) {
 			throw new TrainException(
-					"can not unboard more passengers then are on train");
+					"can not unboard more passengers than are on train");
 		}
 
 		this.passengersOnboard = this.passengersOnboard - departingPassenger;
