@@ -4,6 +4,7 @@ import asgn2Exceptions.TrainException;
 import asgn2RollingStock.FreightCar;
 import asgn2RollingStock.Locomotive;
 import asgn2RollingStock.PassengerCar;
+import asgn2Train.DepartingTrain;
 
 
 public class Test {
@@ -27,7 +28,12 @@ public class Test {
 		System.out.println(passengerTest);
 		System.out.println(passengerTest.board(6));
 		System.out.println(passengerTest);
-
+		
+		DepartingTrain testTrain = new DepartingTrain();
+		testTrain.addCarriage(new Locomotive(100, "5E"));
+		testTrain.addCarriage(new PassengerCar(100, 200));
+		testTrain.addCarriage(freightTest);
+		System.out.println(testTrain);
 	}
 
 }

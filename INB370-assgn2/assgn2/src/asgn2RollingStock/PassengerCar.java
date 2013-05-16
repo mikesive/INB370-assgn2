@@ -94,7 +94,7 @@ public class PassengerCar extends RollingStock {
 	 */
 	@Override
 	public String toString() {
-		return "Passenger (" + this.passengersOnboard + "/"
+		return "Passenger(" + this.passengersOnboard + "/"
 				+ this.numberOfSeats + ")";
 	}
 

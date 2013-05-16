@@ -41,6 +41,6 @@ public class FreightCar extends RollingStock {
 	 */
 	@Override
 	public String toString(){
-		return "Freight ("+ this.goodsType +")";
+		return "Freight("+ this.goodsType +")";
 	}
 }
