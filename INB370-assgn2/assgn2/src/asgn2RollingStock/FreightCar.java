@@ -2,6 +2,11 @@ package asgn2RollingStock;
 
 import asgn2Exceptions.TrainException;
 
+/**Creates a rolling stock train of type Freight Car
+ * 
+ * @author Wayne Maxwell
+ *
+ */
 public class FreightCar extends RollingStock {
 	
 	String goodsType;
@@ -36,7 +41,7 @@ public class FreightCar extends RollingStock {
 		return this.goodsType;
 	}
 	
-	/**Returns a description of the rollingstock
+	/**Returns a description of the rolling stock
 	 * @return string description
 	 */
 	@Override
