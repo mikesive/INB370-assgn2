@@ -28,24 +28,29 @@ public class DepartingTrain {
 			return null;
 		}
 		else {
-			return trainCarriages.get(currentCarriageIndex);
+			currentCarriageIndex = 1;//needs to proceed to next index for nextCarraige
+			return trainCarriages.get(currentCarriageIndex-1);//added -1 to reference right
 		}
 		
 	}
 	
 	public RollingStock nextCarriage() {
-		if (trainCarriages.isEmpty()) {
+		if (trainCarriages.isEmpty() || currentCarriageIndex > lastCarriage()) {
 			currentCarriageIndex = 0;
 			return null;
-		}
+		} //If statement needed extra test to ensure next carriage does not go out of bounds
 		else {
 			currentCarriageIndex++;
-			return trainCarriages.get(currentCarriageIndex);
+			return trainCarriages.get(currentCarriageIndex-1);//added -1 to reference right
 		}
 	}
 	
-	
 	public Integer board(int newPassengers) throws TrainException {
+		
+		if(newPassengers<0){
+			throw new TrainException("Cannot have negitive Pasengers");//Added in exception
+		}
+		
 		for (RollingStock i : trainCarriages) {
 			if(i instanceof PassengerCar) {
 				newPassengers = ((PassengerCar) i).board(newPassengers);
