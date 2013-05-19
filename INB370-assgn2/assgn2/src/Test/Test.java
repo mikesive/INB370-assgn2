@@ -32,8 +32,11 @@ public class Test {
 		DepartingTrain testTrain = new DepartingTrain();
 		testTrain.addCarriage(new Locomotive(100, "5E"));
 		testTrain.addCarriage(new PassengerCar(100, 200));
-		testTrain.addCarriage(freightTest);
 		System.out.println(testTrain);
+		testTrain.addCarriage(new PassengerCar(100, 300));
+		System.out.println(testTrain.board(500));
+		System.out.println(testTrain);
+		
 	}
 
 }
