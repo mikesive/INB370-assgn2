@@ -98,7 +98,7 @@ public class DepartingTrain {
 			throw new TrainException("Can only have one Locomotive, at the front of the train.");
 		}
 		if (newCarriage instanceof PassengerCar && trainCarriages.get(lastCarriage()) instanceof FreightCar) {
-			throw new TrainException ("Passenger Car cannot be behing Freight Car.");
+			throw new TrainException ("Passenger Car cannot be behind a Freight Car.");
 		}
 		if (((newCarriage instanceof PassengerCar) || (newCarriage instanceof FreightCar)) && trainCarriages.isEmpty()) {
 			throw new TrainException ("First carriage must be a locomotive.");
