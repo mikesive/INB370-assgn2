@@ -4,16 +4,20 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Point;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class GamePanel extends JFrame {
@@ -23,26 +27,102 @@ public class GamePanel extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	//gui components
+	// gui components
 	private JPanel locomotivePanel;
 	private JPanel passengerCarPanel;
-	private JPanel frieghtCarPanel;
-	private JButton submitLocomotive;
+	private JPanel freightCarPanel;
+	private JPanel boardingPanel;
+	private JButton submitLocomotive;// add action listener
+	private JButton submitPassengerCar;// add action listener
+	private JButton submitFreightCar;// add action listener
+	private JButton submitBoardPassengers;// add action listener
+	private JButton resetTrain;// add action listener
+	private JButton removeCarriage;// add action listener
 	private JLabel locomotiveWeightLabel;
 	private JLabel locomotiveEngineType;
 	private JLabel locomotiveEnginePower;
+	private JLabel passengerCarWeightLabel;
+	private JLabel passengerCarSeatsLabel;
+	private JLabel freightCarWeightLabel;
+	private JLabel freightTypeLabel;
+	private JLabel numberOfPassengersLabel;
+	private JLabel passengersVsSeatsLabel;// this should update
+	private JLabel leftOverPassengersLabel;// this should update
+	private JLabel canTrainMoveLabel;// this should update
 	private JTextField locomotiveWeightField;
 	private JTextField locomotivePowerField;
+	private JTextField passengerCarWeightField;
+	private JTextField passengerCarSeatsField;
+	private JTextField freightCarWeightField;
+	private JTextField numberOfPassengersField;
+	private JComboBox locomotiveEngineTypeSelect;
+	private JComboBox freightTypeSelect;
+	private JTextArea displayText;
+	private JScrollPane textTrainConfiguration;// this should update
+	private JScrollPane graphicalTrainConfiguration;// this should update
 
 	public GamePanel() {
 		super("Train Configuration");
-		
+
 		initializeComponents();
-		
+
 	}
-		private void initializeComponents(){
+
+	private void initializeComponents() {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLayout(null);
+
+		// setup text display
+		displayText = new JTextArea();
+		displayText.setEditable(false);
+		displayText.setLineWrap(true);
+		displayText.setFont(new Font("Arial", Font.BOLD, 24));
+		displayText.setBorder(BorderFactory.createEtchedBorder());
+		textTrainConfiguration = new JScrollPane(displayText);
+		textTrainConfiguration.setSize(750, 150);
+		textTrainConfiguration.setLocation(3, 180);
+
+		// setup graphical display
+		graphicalTrainConfiguration = new JScrollPane();
+		graphicalTrainConfiguration.setSize(750, 170);
+		graphicalTrainConfiguration.setLocation(3, 3);
+
+		// set up frame controls
+		resetTrain = new JButton("Reset Train");
+		resetTrain.setSize(200, 30);
+		resetTrain.setLocation(547, 331);
+		removeCarriage = new JButton("Remove Carriage");
+		removeCarriage.setSize(200, 30);
+		removeCarriage.setLocation(342, 331);
+		canTrainMoveLabel = new JLabel("Train Can Move:");
+		canTrainMoveLabel.setBounds(100, 331, 200, 30);
+
+		// setup boarding Panel
+		boardingPanel = new JPanel(null);
+		boardingPanel.setBorder(BorderFactory.createTitledBorder(
+				BorderFactory.createEtchedBorder(), "Board Passengers"));
+		boardingPanel.setLocation(750, 0);
+		boardingPanel.setSize(239, 365);
+
+		// boarding panel components
+		submitBoardPassengers = new JButton("Board");
+		submitBoardPassengers.setSize(100, 30);
+		submitBoardPassengers.setLocation(70, 20);
+		passengersVsSeatsLabel = new JLabel("Passengers/Seats: 0/0");
+		passengersVsSeatsLabel.setBounds(20, 55, 200, 30);
+		leftOverPassengersLabel = new JLabel("Passengers Left Over: 0");
+		leftOverPassengersLabel.setBounds(20, 90, 200, 30);
+		numberOfPassengersLabel = new JLabel("Number To Board");
+		numberOfPassengersLabel.setBounds(20, 125, 100, 30);
+		numberOfPassengersField = new JTextField(1);
+		numberOfPassengersField.setBounds(125, 125, 100, 30);
+
+		// add boarding panel items
+		boardingPanel.add(submitBoardPassengers);
+		boardingPanel.add(passengersVsSeatsLabel);
+		boardingPanel.add(leftOverPassengersLabel);
+		boardingPanel.add(numberOfPassengersLabel);
+		boardingPanel.add(numberOfPassengersField);
 
 		// setup locomotive Panel
 		locomotivePanel = new JPanel(null);
@@ -51,7 +131,7 @@ public class GamePanel extends JFrame {
 		locomotivePanel.setLocation(0, 366);
 		locomotivePanel.setSize(326, 200);
 
-		//locomotive panel components
+		// locomotive panel components
 		submitLocomotive = new JButton("Submit Locomotive");
 		submitLocomotive.setSize(200, 30);
 		submitLocomotive.setLocation(63, 20);
@@ -65,19 +145,20 @@ public class GamePanel extends JFrame {
 		locomotivePowerField.setBounds(150, 90, 113, 30);
 		locomotiveEngineType = new JLabel("Engine Type");
 		locomotiveEngineType.setBounds(63, 125, 100, 30);
-		
-		
-		
-		
-		
+		locomotiveEngineTypeSelect = new JComboBox();
+		locomotiveEngineTypeSelect.addItem("Electric");
+		locomotiveEngineTypeSelect.addItem("Diesel");
+		locomotiveEngineTypeSelect.addItem("Steam");
+		locomotiveEngineTypeSelect.setBounds(150, 125, 113, 30);
+
+		// add locomotive panel items
 		locomotivePanel.add(submitLocomotive);
 		locomotivePanel.add(locomotiveWeightLabel);
 		locomotivePanel.add(locomotiveWeightField);
 		locomotivePanel.add(locomotiveEnginePower);
 		locomotivePanel.add(locomotivePowerField);
 		locomotivePanel.add(locomotiveEngineType);
-		
-		
+		locomotivePanel.add(locomotiveEngineTypeSelect);
 
 		// Set up passenger car panel
 		passengerCarPanel = new JPanel(null);
@@ -86,28 +167,65 @@ public class GamePanel extends JFrame {
 		passengerCarPanel.setLocation(332, 366);
 		passengerCarPanel.setSize(326, 200);
 
-		// setup submit passenger car button
-		JButton submitPassengerCar = new JButton("Submit Passenger Car");
+		// passenger car panel components
+		submitPassengerCar = new JButton("Submit Passenger Car");
 		submitPassengerCar.setSize(200, 30);
+		submitPassengerCar.setLocation(63, 20);
+		passengerCarWeightLabel = new JLabel("Weight");
+		passengerCarWeightLabel.setBounds(63, 55, 100, 30);
+		passengerCarWeightField = new JTextField(20);
+		passengerCarWeightField.setBounds(150, 55, 113, 30);
+		passengerCarSeatsLabel = new JLabel("Number Of Seats");
+		passengerCarSeatsLabel.setBounds(63, 90, 100, 30);
+		passengerCarSeatsField = new JTextField(1);
+		passengerCarSeatsField.setBounds(163, 90, 100, 30);
 
+		// add passenger car panel items
 		passengerCarPanel.add(submitPassengerCar);
+		passengerCarPanel.add(passengerCarWeightLabel);
+		passengerCarPanel.add(passengerCarWeightField);
+		passengerCarPanel.add(passengerCarSeatsLabel);
+		passengerCarPanel.add(passengerCarSeatsField);
 
 		// Set up freight car panel
-		frieghtCarPanel = new JPanel(null);
-		frieghtCarPanel.setBorder(BorderFactory.createTitledBorder(
+		freightCarPanel = new JPanel(null);
+		freightCarPanel.setBorder(BorderFactory.createTitledBorder(
 				BorderFactory.createEtchedBorder(), "Freight Car"));
-		frieghtCarPanel.setLocation(664, 366);
-		frieghtCarPanel.setSize(326, 200);
+		freightCarPanel.setLocation(664, 366);
+		freightCarPanel.setSize(326, 200);
 
-		// setup submit freight car button
-		JButton submitFreightCar = new JButton("Submit Freight Car");
+		// freight car panel components
+		submitFreightCar = new JButton("Submit Freight Car");
 		submitFreightCar.setSize(200, 30);
+		submitFreightCar.setLocation(63, 20);
+		freightCarWeightLabel = new JLabel("Weight");
+		freightCarWeightLabel.setBounds(63, 55, 100, 30);
+		freightCarWeightField = new JTextField(20);
+		freightCarWeightField.setBounds(150, 55, 113, 30);
+		freightTypeLabel = new JLabel("Frieght Type");
+		freightTypeLabel.setBounds(63, 90, 100, 30);
+		freightTypeSelect = new JComboBox();
+		freightTypeSelect.addItem("General Goods");
+		freightTypeSelect.addItem("Refrigerated Goods");
+		freightTypeSelect.addItem("Dangerous Materials");
+		freightTypeSelect.setBounds(143, 90, 120, 30);
 
-		frieghtCarPanel.add(submitFreightCar);
+		freightCarPanel.add(submitFreightCar);
+		freightCarPanel.add(freightCarWeightLabel);
+		freightCarPanel.add(freightCarWeightField);
+		freightCarPanel.add(freightTypeLabel);
+		freightCarPanel.add(freightTypeSelect);
 
+		//add panel components
 		add(locomotivePanel);
 		add(passengerCarPanel);
-		add(frieghtCarPanel);
+		add(freightCarPanel);
+		add(boardingPanel);
+		add(removeCarriage);
+		add(resetTrain);
+		add(canTrainMoveLabel);
+		add(textTrainConfiguration);
+		add(graphicalTrainConfiguration);
 
 		// Display the window.
 		setPreferredSize(new Dimension(1000, 600));
@@ -116,7 +234,6 @@ public class GamePanel extends JFrame {
 		setVisible(true);
 	}
 
-		
 	public static void main(String[] args) {
 		JFrame.setDefaultLookAndFeelDecorated(true);
 		new GamePanel();
