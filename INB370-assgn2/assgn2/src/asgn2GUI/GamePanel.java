@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -20,7 +22,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-public class GamePanel extends JFrame {
+import asgn2Exceptions.TrainException;
+import asgn2RollingStock.FreightCar;
+import asgn2RollingStock.Locomotive;
+import asgn2RollingStock.PassengerCar;
+import asgn2Train.DepartingTrain;
+
+public class GamePanel extends JFrame implements ActionListener {
 
 	/**
 	 * 
@@ -32,7 +40,7 @@ public class GamePanel extends JFrame {
 	private JPanel passengerCarPanel;
 	private JPanel freightCarPanel;
 	private JPanel boardingPanel;
-	private JButton submitLocomotive;// add action listener
+	private JButton submitLocomotive;
 	private JButton submitPassengerCar;// add action listener
 	private JButton submitFreightCar;// add action listener
 	private JButton submitBoardPassengers;// add action listener
@@ -60,6 +68,13 @@ public class GamePanel extends JFrame {
 	private JTextArea displayText;
 	private JScrollPane textTrainConfiguration;// this should update
 	private JScrollPane graphicalTrainConfiguration;// this should update
+	private DepartingTrain train;
+	private final int ELECTRIC = 0;
+	private final int DIESEL = 1;
+	private final int STEAM = 2;
+	private final int GENERAL = 0;
+	private final int REFRIGERATED = 1;
+	private final int DANGEROUS = 2;
 
 	public GamePanel() {
 		super("Train Configuration");
@@ -89,9 +104,11 @@ public class GamePanel extends JFrame {
 
 		// set up frame controls
 		resetTrain = new JButton("Reset Train");
+		resetTrain.addActionListener(this);
 		resetTrain.setSize(200, 30);
 		resetTrain.setLocation(547, 331);
 		removeCarriage = new JButton("Remove Carriage");
+		removeCarriage.addActionListener(this);
 		removeCarriage.setSize(200, 30);
 		removeCarriage.setLocation(342, 331);
 		canTrainMoveLabel = new JLabel("Train Can Move:");
@@ -106,6 +123,7 @@ public class GamePanel extends JFrame {
 
 		// boarding panel components
 		submitBoardPassengers = new JButton("Board");
+		submitBoardPassengers.addActionListener(this);
 		submitBoardPassengers.setSize(100, 30);
 		submitBoardPassengers.setLocation(70, 20);
 		passengersVsSeatsLabel = new JLabel("Passengers/Seats: 0/0");
@@ -133,6 +151,7 @@ public class GamePanel extends JFrame {
 
 		// locomotive panel components
 		submitLocomotive = new JButton("Submit Locomotive");
+		submitLocomotive.addActionListener(this);
 		submitLocomotive.setSize(200, 30);
 		submitLocomotive.setLocation(63, 20);
 		locomotiveWeightLabel = new JLabel("Weight");
@@ -169,6 +188,7 @@ public class GamePanel extends JFrame {
 
 		// passenger car panel components
 		submitPassengerCar = new JButton("Submit Passenger Car");
+		submitPassengerCar.addActionListener(this);
 		submitPassengerCar.setSize(200, 30);
 		submitPassengerCar.setLocation(63, 20);
 		passengerCarWeightLabel = new JLabel("Weight");
@@ -196,6 +216,7 @@ public class GamePanel extends JFrame {
 
 		// freight car panel components
 		submitFreightCar = new JButton("Submit Freight Car");
+		submitFreightCar.addActionListener(this);
 		submitFreightCar.setSize(200, 30);
 		submitFreightCar.setLocation(63, 20);
 		freightCarWeightLabel = new JLabel("Weight");
@@ -232,6 +253,138 @@ public class GamePanel extends JFrame {
 		setLocation(new Point(100, 50));
 		pack();
 		setVisible(true);
+		newGame();
+	}
+	
+	public void newGame() {
+		train = new DepartingTrain();
+		displayText.setText("");
+		passengersVsSeatsLabel.setText("Passengers/Seats: 0/0");
+		leftOverPassengersLabel.setText("Passengers Left Over: 0");
+		canTrainMoveLabel.setText("Train Can Move:");
+		freightCarWeightField.setText("");
+		locomotiveWeightField.setText("");
+		passengerCarWeightField.setText("");
+		passengerCarSeatsField.setText("");
+		locomotivePowerField.setText("");
+		numberOfPassengersField.setText("");
+		locomotiveEngineTypeSelect.setSelectedIndex(ELECTRIC);
+		freightTypeSelect.setSelectedIndex(GENERAL);
+		
+		
+	}
+	
+	public void actionPerformed(ActionEvent evt) {
+		Object src = evt.getSource();
+		try {
+		if (src == resetTrain) {
+			newGame();
+		} else if (src == submitLocomotive) {
+			addLocomotive(Integer.parseInt(locomotiveWeightField.getText()), getLocomotiveString());
+		} else if (src == submitFreightCar) {
+			addFreightCar(Integer.parseInt(freightCarWeightField.getText()), getFreightString());
+		} else if (src == submitPassengerCar) {
+			addPassengerCar(Integer.parseInt(passengerCarWeightField.getText()), Integer.parseInt(passengerCarSeatsField.getText()));
+		}
+		
+		displayText.append("Train Configuration: " + train.toString() + "\n");
+		}
+		catch (IllegalArgumentException e) {
+			displayText.append("Please submit attributes for the carriage.\n");
+		}
+	}
+	
+
+	public String getLocomotiveString() {
+		
+		if (locomotiveEngineTypeSelect.getSelectedIndex() == ELECTRIC) {
+			return String.format(locomotivePowerField.getText() + "E");
+		}
+		else if (locomotiveEngineTypeSelect.getSelectedIndex() == DIESEL) {
+			return String.format(locomotivePowerField.getText() + "D");
+		}
+		else if (locomotiveEngineTypeSelect.getSelectedIndex() == STEAM) {
+			
+			return String.format(locomotivePowerField.getText() + "S");
+		}
+		
+		return null;
+	}
+	
+	public String getFreightString() {
+		
+		if (freightTypeSelect.getSelectedIndex() == GENERAL) {
+			return "G";
+		}
+		else if (freightTypeSelect.getSelectedIndex() == REFRIGERATED) {
+			return "R";
+		}
+		else if (freightTypeSelect.getSelectedIndex() == DANGEROUS) {
+			return "D";
+		}
+		
+		return null;
+	}
+	
+	public void addLocomotive(Integer grossWeight, String classification) {
+		try {
+			train.addCarriage(new Locomotive(grossWeight, classification));
+			canTrainMoveLabel.setText(trainCanMove());
+		}
+		catch (TrainException e) {
+			displayText.append(e.getMessage() + "\n");
+		}
+	}
+	
+	public void addPassengerCar(Integer grossWeight, Integer numberOfSeats) {
+		try {
+			train.addCarriage(new PassengerCar(grossWeight, numberOfSeats));
+			canTrainMoveLabel.setText(trainCanMove());
+		}
+		catch (TrainException e) {
+			displayText.append(e.getMessage() + "\n");
+		}
+	}
+	
+	public void addFreightCar(Integer grossWeight, String goodsType) {
+		try {
+			train.addCarriage(new FreightCar(grossWeight, goodsType));
+			canTrainMoveLabel.setText(trainCanMove());
+		}
+		catch (TrainException e) {
+			displayText.append(e.getMessage() + "\n");
+		}
+	}
+	
+	public void removeCarriage() {
+		try {
+			train.removeCarriage();
+		}
+		catch (TrainException e) {
+			displayText.append(e.getMessage() + "\n");
+		}
+	}
+	
+	public String trainCanMove() {
+		if(train.trainCanMove()) {
+			return "Train Can Move: Yes";
+		}
+		else if(!train.trainCanMove()) {
+			return "Train Can Move: No";
+		}
+		return null;
+	}
+	
+	public void boardPassengers(int passengers) {
+		try {
+			int leftOver;
+			leftOver = train.board(passengers);
+			leftOverPassengersLabel.setText("Passengers Left Over: " + leftOver);
+			passengersVsSeatsLabel.setText("Passengers/Seats: " + train.numberOnBoard() + "/" + train.numberOfSeats());
+		}
+		catch (TrainException e) {
+			displayText.append(e.getMessage() + "\n");
+		}
 	}
 
 	public static void main(String[] args) {
