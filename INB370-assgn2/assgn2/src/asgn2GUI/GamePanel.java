@@ -6,6 +6,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -43,6 +44,7 @@ public class GamePanel extends JFrame implements ActionListener {
 	private JPanel passengerCarPanel;
 	private JPanel freightCarPanel;
 	private JPanel boardingPanel;
+	private JPanel imageJPanel;
 	private JButton submitLocomotive;
 	private JButton submitPassengerCar;// add action listener
 	private JButton submitFreightCar;// add action listener
@@ -110,6 +112,9 @@ public class GamePanel extends JFrame implements ActionListener {
 		graphicalTrainConfiguration = new JScrollPane();
 		graphicalTrainConfiguration.setSize(750, 170);
 		graphicalTrainConfiguration.setLocation(3, 3);
+		imageJPanel = new JPanel();
+		imageJPanel.setLayout(new GridLayout());
+		graphicalTrainConfiguration.add(imageJPanel);
 
 		// set up frame controls
 		resetTrain = new JButton("Reset Train");
@@ -281,6 +286,8 @@ public class GamePanel extends JFrame implements ActionListener {
 		freightTypeSelect.setSelectedIndex(GENERAL);
 		setPanelState(boardingPanel, false);
 		evaluatePanelStates();
+		addImage(1);
+		
 		
 	}
 
@@ -343,10 +350,12 @@ public class GamePanel extends JFrame implements ActionListener {
 						.getText()));
 			} else if (src == removeCarriage) {
 				removeCarriage();
+				
 			}
 			evaluatePanelStates();
 			displayText.append("Train Configuration: " + train.toString()
 					+ "\n");
+			canTrainMoveLabel.setText(trainCanMove());
 		} catch (IllegalArgumentException e) {
 			displayText.append("Please submit attributes for the carriage.\n");
 		}
@@ -381,7 +390,7 @@ public class GamePanel extends JFrame implements ActionListener {
 	public void addLocomotive(Integer grossWeight, String classification) {
 		try {
 			train.addCarriage(new Locomotive(grossWeight, classification));
-			canTrainMoveLabel.setText(trainCanMove());
+			
 		} catch (TrainException e) {
 			displayText.append(e.getMessage() + "\n");
 		}
@@ -390,7 +399,7 @@ public class GamePanel extends JFrame implements ActionListener {
 	public void addPassengerCar(Integer grossWeight, Integer numberOfSeats) {
 		try {
 			train.addCarriage(new PassengerCar(grossWeight, numberOfSeats));
-			canTrainMoveLabel.setText(trainCanMove());
+			
 			if (train.numberOfSeats() > 0) {
 				setPanelState(boardingPanel, true);
 			}
@@ -402,7 +411,7 @@ public class GamePanel extends JFrame implements ActionListener {
 	public void addFreightCar(Integer grossWeight, String goodsType) {
 		try {
 			train.addCarriage(new FreightCar(grossWeight, goodsType));
-			canTrainMoveLabel.setText(trainCanMove());
+			
 		} catch (TrainException e) {
 			displayText.append(e.getMessage() + "\n");
 		}
@@ -441,7 +450,11 @@ public class GamePanel extends JFrame implements ActionListener {
 		}
 	}
 	
-	
+	public void addImage(int imgType) {
+		GUIGraphics carriageImg = new GUIGraphics(imgType);
+		imageJPanel.add(carriageImg);
+		imageJPanel.validate();
+	}
 
 	public static void main(String[] args) {
 		JFrame.setDefaultLookAndFeelDecorated(true);
