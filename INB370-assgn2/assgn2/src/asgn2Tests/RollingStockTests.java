@@ -2,6 +2,12 @@ package asgn2Tests;
 
 import static org.junit.Assert.*;
 
+/**Tests FreightCar.java, PassengerCar.java, Locomotive.java, RollingStock.java
+ * 
+ * @author Michael Sive
+ *
+ */
+
 import org.junit.Test;
 
 import asgn2Exceptions.TrainException;
