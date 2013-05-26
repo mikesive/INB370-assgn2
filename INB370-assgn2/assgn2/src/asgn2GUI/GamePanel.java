@@ -1,30 +1,20 @@
 package asgn2GUI;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.lang.reflect.Array;
-
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-
 import asgn2Exceptions.TrainException;
 import asgn2RollingStock.FreightCar;
 import asgn2RollingStock.Locomotive;
@@ -44,7 +34,7 @@ public class GamePanel extends JFrame implements ActionListener {
 	private JPanel passengerCarPanel;
 	private JPanel freightCarPanel;
 	private JPanel boardingPanel;
-	private JPanel imageJPanel;
+	private JPanel imagePanel;
 	private JButton submitLocomotive;
 	private JButton submitPassengerCar;// add action listener
 	private JButton submitFreightCar;// add action listener
@@ -89,9 +79,7 @@ public class GamePanel extends JFrame implements ActionListener {
 
 	public GamePanel() {
 		super("Train Configuration");
-
 		initializeComponents();
-
 	}
 
 	private void initializeComponents() {
@@ -109,12 +97,11 @@ public class GamePanel extends JFrame implements ActionListener {
 		textTrainConfiguration.setLocation(3, 180);
 
 		// setup graphical display
-		graphicalTrainConfiguration = new JScrollPane();
+		imagePanel = new JPanel(null);
+		graphicalTrainConfiguration = new JScrollPane(null);
+		graphicalTrainConfiguration.add(imagePanel);
 		graphicalTrainConfiguration.setSize(750, 170);
 		graphicalTrainConfiguration.setLocation(3, 3);
-		imageJPanel = new JPanel();
-		imageJPanel.setLayout(new GridLayout());
-		graphicalTrainConfiguration.add(imageJPanel);
 
 		// set up frame controls
 		resetTrain = new JButton("Reset Train");
@@ -286,7 +273,7 @@ public class GamePanel extends JFrame implements ActionListener {
 		freightTypeSelect.setSelectedIndex(GENERAL);
 		setPanelState(boardingPanel, false);
 		evaluatePanelStates();
-		addImage(1);
+		addImage();
 		
 		
 	}
@@ -450,10 +437,12 @@ public class GamePanel extends JFrame implements ActionListener {
 		}
 	}
 	
-	public void addImage(int imgType) {
-		GUIGraphics carriageImg = new GUIGraphics(imgType);
-		imageJPanel.add(carriageImg);
-		imageJPanel.validate();
+	public void addImage() {
+		Canvas guistuff = new Canvas();
+		imagePanel.add(guistuff);
+		guistuff.figure = 1;
+		guistuff.repaint();
+		
 	}
 
 	public static void main(String[] args) {
