@@ -100,9 +100,9 @@ public class GamePanel extends JFrame implements ActionListener {
 		textTrainConfiguration.setLocation(3, 180);
 
 		// setup graphical display
-		//addImage();;
-		imagePanel = new JPanel(new BorderLayout());
-		imagePanel.add(addImage(),BorderLayout.CENTER);
+		imagePanel = new JPanel(new FlowLayout());
+		imagePanel.add(addImage());
+		imagePanel.add(addImage());
 		graphicalTrainConfiguration = new JScrollPane(imagePanel);
 		graphicalTrainConfiguration.setSize(750, 170);
 		graphicalTrainConfiguration.setLocation(3, 3);
@@ -444,6 +444,7 @@ public class GamePanel extends JFrame implements ActionListener {
 	public Canvas addImage() {
 		Canvas guistuff = new Canvas();
 		guistuff.figure = Canvas.RECTANGLE;
+		guistuff.setPreferredSize( new Dimension( 50, 280 ) );
 		//guistuff.setSize(11, 11);
 		//guistuff.setLocation(50, 50);
 		guistuff.repaint();
