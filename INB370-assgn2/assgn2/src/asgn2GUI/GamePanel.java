@@ -1,7 +1,5 @@
 package asgn2GUI;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -9,6 +7,8 @@ import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -79,6 +79,7 @@ public class GamePanel extends JFrame implements ActionListener {
 	private final String ELECTRICSTRING = "E";
 	private final String DIESELSTRING = "D";
 	private final String STEAMSTRING = "S";
+	private ArrayList<Canvas> canvasArray;
 
 	public GamePanel() {
 		super("Train Configuration");
@@ -101,8 +102,6 @@ public class GamePanel extends JFrame implements ActionListener {
 
 		// setup graphical display
 		imagePanel = new JPanel(new FlowLayout());
-		imagePanel.add(addImage());
-		imagePanel.add(addImage());
 		graphicalTrainConfiguration = new JScrollPane(imagePanel);
 		graphicalTrainConfiguration.setSize(750, 170);
 		graphicalTrainConfiguration.setLocation(3, 3);
@@ -275,11 +274,9 @@ public class GamePanel extends JFrame implements ActionListener {
 		numberOfPassengersField.setText("");
 		locomotiveEngineTypeSelect.setSelectedIndex(ELECTRIC);
 		freightTypeSelect.setSelectedIndex(GENERAL);
+		canvasArray = new ArrayList<Canvas>();
 		setPanelState(boardingPanel, false);
 		evaluatePanelStates();
-		addImage();
-		
-		
 	}
 
 	private void setPanelState(JPanel panel, Boolean enabled) {
@@ -311,7 +308,7 @@ public class GamePanel extends JFrame implements ActionListener {
 		catch (Exception e) {
 			setPanelState(freightCarPanel, false);
 		}
-		if (train.firstCarriage() instanceof RollingStock || train.numberOnBoard() != 0) {
+		if (train.firstCarriage() instanceof RollingStock && train.numberOnBoard() == 0) {
 			removeCarriage.setEnabled(true);
 		}
 		else {
@@ -344,6 +341,7 @@ public class GamePanel extends JFrame implements ActionListener {
 				
 			}
 			evaluatePanelStates();
+			rePaintImagePanel();
 			displayText.append("Train Configuration: " + train.toString()
 					+ "\n");
 			canTrainMoveLabel.setText(trainCanMove());
@@ -381,6 +379,7 @@ public class GamePanel extends JFrame implements ActionListener {
 	public void addLocomotive(Integer grossWeight, String classification) {
 		try {
 			train.addCarriage(new Locomotive(grossWeight, classification));
+			canvasArray.add(addImage(Canvas.LOCOMOTIVE));
 			
 		} catch (TrainException e) {
 			displayText.append(e.getMessage() + "\n");
@@ -394,6 +393,7 @@ public class GamePanel extends JFrame implements ActionListener {
 			if (train.numberOfSeats() > 0) {
 				setPanelState(boardingPanel, true);
 			}
+			canvasArray.add(addImage(Canvas.PASSENGERCAR));
 		} catch (TrainException e) {
 			displayText.append(e.getMessage() + "\n");
 		}
@@ -402,6 +402,7 @@ public class GamePanel extends JFrame implements ActionListener {
 	public void addFreightCar(Integer grossWeight, String goodsType) {
 		try {
 			train.addCarriage(new FreightCar(grossWeight, goodsType));
+			canvasArray.add(addImage(Canvas.FREIGHTCAR));
 			
 		} catch (TrainException e) {
 			displayText.append(e.getMessage() + "\n");
@@ -411,6 +412,7 @@ public class GamePanel extends JFrame implements ActionListener {
 	public void removeCarriage() {
 		try {
 			train.removeCarriage();
+			canvasArray.remove(canvasArray.size() - 1);
 		} catch (TrainException e) {
 			displayText.append(e.getMessage() + "\n");
 		}
@@ -441,15 +443,28 @@ public class GamePanel extends JFrame implements ActionListener {
 		}
 	}
 	
-	public Canvas addImage() {
+	public Canvas addImage(int type) {
 		Canvas guistuff = new Canvas();
-		guistuff.figure = Canvas.RECTANGLE;
-		guistuff.setPreferredSize( new Dimension( 50, 280 ) );
-		//guistuff.setSize(11, 11);
-		//guistuff.setLocation(50, 50);
-		guistuff.repaint();
-		return guistuff;
 		
+		if (type == Canvas.LOCOMOTIVE){
+			guistuff.figure = Canvas.LOCOMOTIVE;
+		}
+		else if (type == Canvas.PASSENGERCAR) {
+			guistuff.figure = Canvas.PASSENGERCAR;
+		}
+		else {
+			guistuff.figure = Canvas.FREIGHTCAR;
+		}
+		guistuff.setPreferredSize( new Dimension( 100, 50 ) );
+		return guistuff;
+	}
+	
+	public void rePaintImagePanel() {
+		imagePanel.removeAll();
+		for (Canvas c : canvasArray) {
+			imagePanel.add(c);
+			c.repaint();
+		}
 	}
 
 	public static void main(String[] args) {
