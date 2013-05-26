@@ -1,7 +1,10 @@
 package asgn2GUI;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -97,9 +100,10 @@ public class GamePanel extends JFrame implements ActionListener {
 		textTrainConfiguration.setLocation(3, 180);
 
 		// setup graphical display
-		imagePanel = new JPanel(null);
-		graphicalTrainConfiguration = new JScrollPane(null);
-		graphicalTrainConfiguration.add(imagePanel);
+		//addImage();;
+		imagePanel = new JPanel(new BorderLayout());
+		imagePanel.add(addImage(),BorderLayout.CENTER);
+		graphicalTrainConfiguration = new JScrollPane(imagePanel);
 		graphicalTrainConfiguration.setSize(750, 170);
 		graphicalTrainConfiguration.setLocation(3, 3);
 
@@ -437,11 +441,13 @@ public class GamePanel extends JFrame implements ActionListener {
 		}
 	}
 	
-	public void addImage() {
+	public Canvas addImage() {
 		Canvas guistuff = new Canvas();
-		imagePanel.add(guistuff);
-		guistuff.figure = 1;
+		guistuff.figure = Canvas.RECTANGLE;
+		//guistuff.setSize(11, 11);
+		//guistuff.setLocation(50, 50);
 		guistuff.repaint();
+		return guistuff;
 		
 	}
 
