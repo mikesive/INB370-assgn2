@@ -19,14 +19,6 @@ public class DepartingTrain {
 	private int currentCarriageIndex;
 	private final int first = 0;
 	
-	/**Returns last carriage array index
-	 * 
-	 * @return index of last carriage as integer
-	 */
-	private int lastCarriage() {
-		return trainCarriages.size() - 1;
-	}
-
 	/**Initializes array of RollingStock objects
 	 * 
 	 */
@@ -53,13 +45,13 @@ public class DepartingTrain {
 	/**Returns the next carriage in the train after the one returned
 	 * by the immediately preceding call to either this method or method firstCarriage.
 	 * 
-	 * @return RollingStock
+	 * @return RollingStock the next carriage on the train
 	 */
 	public RollingStock nextCarriage() {
 		if (trainCarriages.isEmpty() || currentCarriageIndex > lastCarriage()) {
 			currentCarriageIndex = 0;
 			return null;
-		} //If statement needed extra test to ensure next carriage does not go out of bounds
+		} 
 		else {
 			currentCarriageIndex++;
 			return trainCarriages.get(currentCarriageIndex-1);//added -1 to reference right
@@ -70,12 +62,12 @@ public class DepartingTrain {
 	 * 
 	 * @param newPassengers
 	 * @return Passengers left over if train is full
-	 * @throws TrainException
+	 * @throws TrainException If number of new passengers is negative
 	 */
 	public Integer board(int newPassengers) throws TrainException {
 		
 		if(newPassengers<0){
-			throw new TrainException("Cannot have negitive Pasengers");//Added in exception
+			throw new TrainException("Cannot have negitive Pasengers");
 		}
 		
 		for (RollingStock i : trainCarriages) {
@@ -140,18 +132,26 @@ public class DepartingTrain {
 	/**Adds a given RollingStock to the array
 	 * 
 	 * @param newCarriage
-	 * @throws TrainException
+	 * @throws TrainException if passengers are on train or invalid rain configuration
 	 */
 	public void addCarriage(RollingStock newCarriage) throws TrainException {
+		
+		//only one locomotive
 		if (newCarriage instanceof Locomotive && !trainCarriages.isEmpty()) {
 			throw new TrainException("Can only have one Locomotive, at the front of the train.");
 		}
+		
+		//only allow passenger car in front for freight car
 		if (newCarriage instanceof PassengerCar && trainCarriages.get(lastCarriage()) instanceof FreightCar) {
 			throw new TrainException ("Passenger Car cannot be behind a Freight Car.");
 		}
+		
+		//only allow first carriage to be locomotive
 		if (((newCarriage instanceof PassengerCar) || (newCarriage instanceof FreightCar)) && trainCarriages.isEmpty()) {
 			throw new TrainException ("First carriage must be a locomotive.");
 		}
+		
+		//cannot add carriages if passengers on board
 		if (numberOnBoard() > 0) {
 			throw new TrainException("Cannot add carriages whilst there are passengers on board.");
 		}
@@ -161,12 +161,15 @@ public class DepartingTrain {
 	
 	/**Removes the last RollingStock from the array
 	 * 
-	 * @throws TrainException
+	 * @throws TrainException If there is rolling stock on train or passengers
 	 */
 	public void removeCarriage() throws TrainException {
+		//do not allow carriage to be removed when passengers on board
 		if (numberOnBoard() > 0) {
 			throw new TrainException("Cannot remove carriages whilst there are passengers on board.");
 		}
+		
+		//do not allow carriage to be removed if no carriages
 		if (trainCarriages.isEmpty()) {
 			throw new TrainException("There are no carriages to remove.");
 		}
@@ -185,5 +188,13 @@ public class DepartingTrain {
 			carriageList += "-"+i.toString();
 		}
 		return carriageList.substring(1);
+	}
+	
+	/**Returns last carriage array index
+	 * 
+	 * @return index of last carriage as integer
+	 */
+	private int lastCarriage() {
+		return trainCarriages.size() - 1;
 	}
 }

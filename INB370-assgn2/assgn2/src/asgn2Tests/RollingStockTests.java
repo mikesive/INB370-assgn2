@@ -16,6 +16,10 @@ import asgn2RollingStock.Locomotive;
 import asgn2RollingStock.PassengerCar;
 
 public class RollingStockTests {
+	
+	PassengerCar testPassengerCar;
+	Locomotive testLocomotive;
+	FreightCar testFreightCar;
 
 	@Test
 	/**Tests Passenger Car constructor with valid parameters
@@ -24,7 +28,7 @@ public class RollingStockTests {
 	 */
 	public void PassengerCarValidConstructor() throws TrainException {
 		try {
-			PassengerCar testCar = new PassengerCar(30, 100);
+			testPassengerCar = new PassengerCar(30, 100);
 			
 		}
 		catch (TrainException e) {
@@ -38,7 +42,7 @@ public class RollingStockTests {
 	 * @throws TrainException
 	 */
 	public void PassengerCarWeightZero() throws TrainException {
-		PassengerCar testCar = new PassengerCar(0, 100);
+		testPassengerCar = new PassengerCar(0, 100);
 	}
 	
 	@Test (expected=TrainException.class)
@@ -47,7 +51,7 @@ public class RollingStockTests {
 	 * @throws TrainException
 	 */
 	public void PassengerCarWeightNegative() throws TrainException {
-		PassengerCar testCar = new PassengerCar(-1, 100);
+		testPassengerCar = new PassengerCar(-1, 100);
 	}
 	
 	@Test (expected=TrainException.class)
@@ -56,7 +60,7 @@ public class RollingStockTests {
 	 * @throws TrainException
 	 */
 	public void PassengerCarSeatsNegative() throws TrainException {
-		PassengerCar testCar = new PassengerCar(100, -1);
+		testPassengerCar = new PassengerCar(100, -1);
 	}
 	
 	@Test
@@ -65,8 +69,8 @@ public class RollingStockTests {
 	 * @throws TrainException
 	 */
 	public void getNumberOfSeats() throws TrainException {
-		PassengerCar testCar = new PassengerCar(100, 100);
-		int seats = testCar.numberOfSeats();
+		testPassengerCar = new PassengerCar(100, 100);
+		int seats = testPassengerCar.numberOfSeats();
 		assertEquals(seats, 100);
 	}
 	
@@ -76,9 +80,9 @@ public class RollingStockTests {
 	 * @throws TrainException
 	 */
 	public void boardPassengers() throws TrainException {
-		PassengerCar testCar = new PassengerCar(100, 100);
-		testCar.board(25);
-		int seats = testCar.numberOnBoard();
+		testPassengerCar = new PassengerCar(100, 100);
+		testPassengerCar.board(25);
+		int seats = testPassengerCar.numberOnBoard();
 		assertEquals(seats, 25);
 	}
 	
@@ -88,8 +92,8 @@ public class RollingStockTests {
 	 * @throws TrainException
 	 */
 	public void boardPassengersZero() throws TrainException {
-		PassengerCar testCar = new PassengerCar(100, 100);
-		testCar.board(0);
+		testPassengerCar = new PassengerCar(100, 100);
+		testPassengerCar.board(0);
 	}
 	
 	@Test (expected = TrainException.class)
@@ -98,8 +102,8 @@ public class RollingStockTests {
 	 * @throws TrainException
 	 */
 	public void boardPassengersNegative() throws TrainException {
-		PassengerCar testCar = new PassengerCar(100, 100);
-		testCar.board(-3);
+		testPassengerCar = new PassengerCar(100, 100);
+		testPassengerCar.board(-3);
 	}
 	
 	@Test
@@ -108,8 +112,8 @@ public class RollingStockTests {
 	 * @throws TrainException
 	 */
 	public void boardPassengersOverflow() throws TrainException {
-		PassengerCar testCar = new PassengerCar(100, 100);
-		int passengersLeft = testCar.board(125);
+		testPassengerCar = new PassengerCar(100, 100);
+		int passengersLeft = testPassengerCar.board(125);
 		assertEquals(passengersLeft, 25);
 	}
 	
@@ -119,9 +123,9 @@ public class RollingStockTests {
 	 * @throws TrainException
 	 */
 	public void alightPassengersZero() throws TrainException {
-		PassengerCar testCar = new PassengerCar(100, 100);
-		testCar.board(98);
-		testCar.alight(0);
+		testPassengerCar = new PassengerCar(100, 100);
+		testPassengerCar.board(98);
+		testPassengerCar.alight(0);
 	}
 	
 	@Test (expected=TrainException.class)
@@ -130,9 +134,9 @@ public class RollingStockTests {
 	 * @throws TrainException
 	 */
 	public void alightPassengersNegative() throws TrainException {
-		PassengerCar testCar = new PassengerCar(100, 100);
-		testCar.board(98);
-		testCar.alight(-3);
+		testPassengerCar = new PassengerCar(100, 100);
+		testPassengerCar.board(98);
+		testPassengerCar.alight(-3);
 	}
 	
 	@Test (expected=TrainException.class)
@@ -141,9 +145,9 @@ public class RollingStockTests {
 	 * @throws TrainException
 	 */
 	public void alightPassengersOverflow() throws TrainException {
-		PassengerCar testCar = new PassengerCar(100, 100);
-		testCar.board(98);
-		testCar.alight(100);
+		testPassengerCar = new PassengerCar(100, 100);
+		testPassengerCar.board(98);
+		testPassengerCar.alight(100);
 	}
 	
 	@Test
@@ -152,10 +156,10 @@ public class RollingStockTests {
 	 * @throws TrainException
 	 */
 	public void alightPassengersValid() throws TrainException {
-		PassengerCar testCar = new PassengerCar(100, 100);
-		testCar.board(98);
-		testCar.alight(26);
-		int onBoard = testCar.numberOnBoard();
+		testPassengerCar = new PassengerCar(100, 100);
+		testPassengerCar.board(98);
+		testPassengerCar.alight(26);
+		int onBoard = testPassengerCar.numberOnBoard();
 		assertEquals(onBoard, 72);
 	}
 	
@@ -165,10 +169,10 @@ public class RollingStockTests {
 	 * @throws TrainException
 	 */
 	public void alightPassengersToString() throws TrainException {
-		PassengerCar testCar = new PassengerCar(100, 100);
-		testCar.board(98);
-		testCar.alight(26);
-		String string = testCar.toString();
+		testPassengerCar = new PassengerCar(100, 100);
+		testPassengerCar.board(98);
+		testPassengerCar.alight(26);
+		String string = testPassengerCar.toString();
 		assertEquals(string, "Passenger(72/100)");
 	}
 	
@@ -179,7 +183,7 @@ public class RollingStockTests {
 	 */
 	public void FreightCarValidConstructor() throws TrainException {
 		try {
-			FreightCar testCar = new FreightCar(100, "G");
+			testFreightCar = new FreightCar(100, "G");
 			
 		}
 		catch (TrainException e) {
@@ -193,7 +197,7 @@ public class RollingStockTests {
 	 * @throws TrainException
 	 */
 	public void FreightCarWeightZero() throws TrainException {
-		FreightCar testCar = new FreightCar(0, "G");
+		testFreightCar = new FreightCar(0, "G");
 	}
 	
 	@Test (expected=TrainException.class)
@@ -202,7 +206,7 @@ public class RollingStockTests {
 	 * @throws TrainException
 	 */
 	public void FreightCarWeightNegative() throws TrainException {
-		FreightCar testCar = new FreightCar(-1, "G");
+		testFreightCar = new FreightCar(-1, "G");
 	}
 	
 	@Test (expected=TrainException.class)
@@ -211,7 +215,7 @@ public class RollingStockTests {
 	 * @throws TrainException
 	 */
 	public void FreightCarGoodsInvalid() throws TrainException {
-		FreightCar testCar = new FreightCar(300, "K");
+		testFreightCar = new FreightCar(300, "K");
 	}
 	
 	@Test
@@ -220,8 +224,8 @@ public class RollingStockTests {
 	 * @throws TrainException
 	 */
 	public void FreightCarGoodsType() throws TrainException {
-		FreightCar testCar = new FreightCar(100, "G");
-		assertEquals("G", testCar.goodsType());
+		testFreightCar = new FreightCar(100, "G");
+		assertEquals("G", testFreightCar.goodsType());
 	}
 	
 	@Test
@@ -230,8 +234,8 @@ public class RollingStockTests {
 	 * @throws TrainException
 	 */
 	public void FreightCarToString() throws TrainException {
-		FreightCar testCar = new FreightCar(100, "G");
-		assertEquals(testCar.toString(), "Freight(G)");
+		testFreightCar = new FreightCar(100, "G");
+		assertEquals(testFreightCar.toString(), "Freight(G)");
 	}
 	
 	@Test
@@ -241,7 +245,7 @@ public class RollingStockTests {
 	 */
 	public void LocomotiveValidConstructor() throws TrainException {
 		try {
-			Locomotive testCar = new Locomotive(100, "2E");
+			testLocomotive = new Locomotive(100, "2E");
 			
 		}
 		catch (TrainException e) {
@@ -255,7 +259,7 @@ public class RollingStockTests {
 	 * @throws TrainException
 	 */
 	public void LocomotiveWeightZero() throws TrainException {
-		Locomotive testCar = new Locomotive(0, "G");
+		testLocomotive = new Locomotive(0, "G");
 	}
 	
 	@Test (expected=TrainException.class)
@@ -264,7 +268,7 @@ public class RollingStockTests {
 	 * @throws TrainException
 	 */
 	public void LocomotiveWeightNegative() throws TrainException {
-		Locomotive testCar = new Locomotive(-1, "G");
+		testLocomotive = new Locomotive(-1, "G");
 	}
 	
 	@Test (expected=TrainException.class)
@@ -273,7 +277,7 @@ public class RollingStockTests {
 	 * @throws TrainException
 	 */
 	public void LocomotiveInvalidClassificationLetter() throws TrainException {
-		Locomotive testCar = new Locomotive(198, "9K");
+		testLocomotive = new Locomotive(198, "9K");
 	}
 	
 	@Test (expected=TrainException.class)
@@ -282,7 +286,7 @@ public class RollingStockTests {
 	 * @throws TrainException
 	 */
 	public void LocomotiveInvalidClassificationNumber() throws TrainException {
-		Locomotive testCar = new Locomotive(198, "10E");
+		testLocomotive = new Locomotive(198, "10E");
 	}
 	
 	@Test (expected=TrainException.class)
@@ -291,7 +295,7 @@ public class RollingStockTests {
 	 * @throws TrainException
 	 */
 	public void LocomotiveInvalidClassification() throws TrainException {
-		Locomotive testCar = new Locomotive(198, "test");
+		testLocomotive = new Locomotive(198, "test");
 	}
 	
 	@Test
@@ -300,8 +304,8 @@ public class RollingStockTests {
 	 * @throws TrainException
 	 */
 	public void LocomotiveGetPower() throws TrainException {
-		Locomotive testCar = new Locomotive(100, "5E");
-		int power = testCar.power();
+		testLocomotive = new Locomotive(100, "5E");
+		int power = testLocomotive.power();
 		assertEquals(power, 500);
 	}
 	
@@ -311,8 +315,8 @@ public class RollingStockTests {
 	 * @throws TrainException
 	 */
 	public void LocomotiveToString() throws TrainException {
-		Locomotive testCar = new Locomotive(400, "3E");
-		assertEquals(testCar.toString(), "Loco(3E)");
+		testLocomotive = new Locomotive(400, "3E");
+		assertEquals(testLocomotive.toString(), "Loco(3E)");
 	}
 
 }
