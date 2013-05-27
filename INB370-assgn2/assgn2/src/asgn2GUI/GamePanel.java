@@ -27,8 +27,10 @@ import asgn2Train.DepartingTrain;
 
 public class GamePanel extends JFrame implements ActionListener {
 
-	/**This class creates a Graphical User Interface to build a train consisting of different
-	 * carriage types, and to board passengers.
+	/**
+	 * This class creates a Graphical User Interface to build a train consisting
+	 * of different carriage types, and to board passengers.
+	 * 
 	 * @author Wayne Maxwell
 	 * @author Michael Sive
 	 */
@@ -41,11 +43,11 @@ public class GamePanel extends JFrame implements ActionListener {
 	private JPanel boardingPanel;
 	private JPanel imagePanel;
 	private JButton submitLocomotive;
-	private JButton submitPassengerCar;// add action listener
-	private JButton submitFreightCar;// add action listener
-	private JButton submitBoardPassengers;// add action listener
-	private JButton resetTrain;// add action listener
-	private JButton removeCarriage;// add action listener
+	private JButton submitPassengerCar;
+	private JButton submitFreightCar;
+	private JButton submitBoardPassengers;
+	private JButton resetTrain;
+	private JButton removeCarriage;
 	private JLabel locomotiveWeightLabel;
 	private JLabel locomotiveEngineType;
 	private JLabel locomotiveEnginePower;
@@ -54,9 +56,9 @@ public class GamePanel extends JFrame implements ActionListener {
 	private JLabel freightCarWeightLabel;
 	private JLabel freightTypeLabel;
 	private JLabel numberOfPassengersLabel;
-	private JLabel passengersVsSeatsLabel;// this should update
-	private JLabel leftOverPassengersLabel;// this should update
-	private JLabel canTrainMoveLabel;// this should update
+	private JLabel passengersVsSeatsLabel;
+	private JLabel leftOverPassengersLabel;
+	private JLabel canTrainMoveLabel;
 	private JTextField locomotiveWeightField;
 	private JTextField locomotivePowerField;
 	private JTextField passengerCarWeightField;
@@ -66,8 +68,8 @@ public class GamePanel extends JFrame implements ActionListener {
 	private JComboBox locomotiveEngineTypeSelect;
 	private JComboBox freightTypeSelect;
 	private JTextArea displayText;
-	private JScrollPane textTrainConfiguration;// this should update
-	private JScrollPane graphicalTrainConfiguration;// this should update
+	private JScrollPane textTrainConfiguration;
+	private JScrollPane graphicalTrainConfiguration;
 	private DepartingTrain train;
 	private final int ELECTRIC = 0;
 	private final int DIESEL = 1;
@@ -83,11 +85,19 @@ public class GamePanel extends JFrame implements ActionListener {
 	private final String STEAMSTRING = "S";
 	private ArrayList<Canvas> canvasArray;
 
+	/**
+	 * Constructor setup interface and initialize the game
+	 * 
+	 */
 	public GamePanel() {
 		super("Train Configuration");
 		initializeComponents();
 	}
 
+	/**
+	 * Constructs the GUI interface with its various components
+	 * 
+	 */
 	private void initializeComponents() {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLayout(null);
@@ -262,10 +272,12 @@ public class GamePanel extends JFrame implements ActionListener {
 		newGame();
 	}
 
-	/**Sets up default text in panels, initializes train object, greys out panels.
+	/**
+	 * Sets up default text in panels, initializes train object, greys out
+	 * panels.
 	 * 
 	 */
-	public void newGame() {
+	private void newGame() {
 		train = new DepartingTrain();
 		displayText.setText("");
 		passengersVsSeatsLabel.setText("Passengers/Seats: 0/0");
@@ -284,7 +296,8 @@ public class GamePanel extends JFrame implements ActionListener {
 		evaluatePanelStates();
 	}
 
-	/**Sets all components in a given panel to a given state.
+	/**
+	 * Sets all components in a given panel to a given state.
 	 * 
 	 * @param panel
 	 * @param enabled
@@ -292,19 +305,22 @@ public class GamePanel extends JFrame implements ActionListener {
 	private void setPanelState(JPanel panel, Boolean enabled) {
 		Component[] components = panel.getComponents();
 		for (Component c : components) {
-			c.setEnabled(enabled);
-		}	
+			c.setEnabled(enabled);// enables or disables panel components
+		}
 	}
-	
-	/**Attempts one of every action. If an exception is thrown, the action button is greyed out in the GamePanel,
-	 * to prevent the user from being able to cause exceptions. The action is always reversed if it is successful.
+
+	/**
+	 * Attempts one of every action. If an exception is thrown, the action
+	 * button is greyed out in the GamePanel, to prevent the user from being
+	 * able to cause exceptions. The action is always reversed if it is
+	 * successful.
 	 * 
 	 */
-	public void evaluatePanelStates() {
-		//Sets locomotivePanel state
-		setPanelState(locomotivePanel, train.firstCarriage() == null );
-		
-		//Attempts to add and remove passenger car
+	private void evaluatePanelStates() {
+		// Sets locomotivePanel state
+		setPanelState(locomotivePanel, train.firstCarriage() == null);
+
+		// Attempts to add and remove passenger car
 		try {
 			train.addCarriage(new PassengerCar(100, 100));
 			train.removeCarriage();
@@ -314,8 +330,8 @@ public class GamePanel extends JFrame implements ActionListener {
 		catch (Exception e) {
 			setPanelState(passengerCarPanel, false);
 		}
-		
-		//Attempts to add and remove freight car
+
+		// Attempts to add and remove freight car
 		try {
 			train.addCarriage(new FreightCar(100, GENERALSTRING));
 			train.removeCarriage();
@@ -325,17 +341,18 @@ public class GamePanel extends JFrame implements ActionListener {
 		catch (Exception e) {
 			setPanelState(freightCarPanel, false);
 		}
-		
-		//Enables or disables removeCarriage as necessary
-		if (train.firstCarriage() instanceof RollingStock && train.numberOnBoard() == 0) {
+
+		// Enables or disables removeCarriage as necessary
+		if (train.firstCarriage() instanceof RollingStock
+				&& train.numberOnBoard() == 0) {
 			removeCarriage.setEnabled(true);
-		}
-		else {
+		} else {
 			removeCarriage.setEnabled(false);
 		}
 	}
 
-	/**Action Listener for each button in the GamePanel.
+	/**
+	 * Action Listener for each button in the GamePanel.
 	 * 
 	 */
 	public void actionPerformed(ActionEvent evt) {
@@ -360,31 +377,39 @@ public class GamePanel extends JFrame implements ActionListener {
 						.getText()));
 			} else if (src == removeCarriage) {
 				removeCarriage();
-				
 			}
+
+			// actions to perform regardless of button pushed
 			evaluatePanelStates();
 			rePaintImagePanel();
+
 			if (train.firstCarriage() != null) {
-			displayText.append("Train Configuration: " + train.toString()
-					+ "\n");
-			canTrainMoveLabel.setText(trainCanMove());
+				displayText.append("Train Configuration: " + train.toString()
+						+ "\n");
+				canTrainMoveLabel.setText(trainCanMove());
 			}
+
 			if (train.firstCarriage() == null) {
 				canTrainMoveLabel.setText("Train Can Move: ");
 			}
+
 		} catch (IllegalArgumentException e) {
 			displayText.append("Please submit attributes for the carriage.\n");
 		}
 	}
 
-	/**Returns the first letter of the locomotive type selected in the dropdown menu
+	/**
+	 * Returns the first letter of the locomotive type selected in the dropdown
+	 * menu
 	 * 
-	 * @return string corresponding to dropdown option selected in locomotiveEngineTypeSelect
+	 * @return string corresponding to dropdown option selected in
+	 *         locomotiveEngineTypeSelect
 	 */
-	public String getLocomotiveString() {
+	private String getLocomotiveString() {
 
 		if (locomotiveEngineTypeSelect.getSelectedIndex() == ELECTRIC) {
-			return String.format(locomotivePowerField.getText() + ELECTRICSTRING);
+			return String.format(locomotivePowerField.getText()
+					+ ELECTRICSTRING);
 		} else if (locomotiveEngineTypeSelect.getSelectedIndex() == DIESEL) {
 			return String.format(locomotivePowerField.getText() + DIESELSTRING);
 		} else if (locomotiveEngineTypeSelect.getSelectedIndex() == STEAM) {
@@ -394,11 +419,14 @@ public class GamePanel extends JFrame implements ActionListener {
 		return null;
 	}
 
-	/**Returns the first letter of the freight type selected in the dropdown menu
+	/**
+	 * Returns the first letter of the freight type selected in the dropdown
+	 * menu
 	 * 
-	 * @return string corresponding to dropdown option selected in freightTypeSelect
+	 * @return string corresponding to dropdown option selected in
+	 *         freightTypeSelect
 	 */
-	public String getFreightString() {
+	private String getFreightString() {
 
 		if (freightTypeSelect.getSelectedIndex() == GENERAL) {
 			return GENERALSTRING;
@@ -411,66 +439,86 @@ public class GamePanel extends JFrame implements ActionListener {
 		return null;
 	}
 
-	public void addLocomotive(Integer grossWeight, String classification) {
+	/**
+	 * Adds a passenger car with the given parameters to the train array with
+	 * its corresponding graphic
+	 * 
+	 * @param grossWeight
+	 *            of the carriage
+	 * @param classification
+	 *            of locomotive
+	 */
+	private void addLocomotive(Integer grossWeight, String classification) {
 		try {
 			train.addCarriage(new Locomotive(grossWeight, classification));
-			canvasArray.add(addImage(Canvas.LOCOMOTIVE));
-			
+			canvasArray.add(addImage(Canvas.LOCOMOTIVE));// add graphic
+
 		} catch (TrainException e) {
 			displayText.append(e.getMessage() + "\n");
 		}
 	}
 
-	/**Adds a passenger car with the given parameters to the train array
+	/**
+	 * Adds a passenger car with the given parameters to the train array with
+	 * its corresponding graphic
 	 * 
-	 * @param grossWeight of the carriage
-	 * @param numberOfSeats on board the carriage
+	 * @param grossWeight
+	 *            of the carriage
+	 * @param numberOfSeats
+	 *            on board the carriage
 	 */
-	public void addPassengerCar(Integer grossWeight, Integer numberOfSeats) {
+	private void addPassengerCar(Integer grossWeight, Integer numberOfSeats) {
 		try {
 			train.addCarriage(new PassengerCar(grossWeight, numberOfSeats));
-			
+
 			if (train.numberOfSeats() > 0) {
-				setPanelState(boardingPanel, true);
+				setPanelState(boardingPanel, true);// enable boarding panel if
 			}
-			canvasArray.add(addImage(Canvas.PASSENGERCAR));
+			canvasArray.add(addImage(Canvas.PASSENGERCAR));// add graphic
 		} catch (TrainException e) {
 			displayText.append(e.getMessage() + "\n");
 		}
 	}
 
-	/**Adds a freight car with the given parameters to the train array
+	/**
+	 * Adds a freight car with the given parameters to the train array with its
+	 * corresponding graphic
 	 * 
-	 * @param grossWeight of the carriage
-	 * @param goodsType that the carriage will hold
+	 * @param grossWeight
+	 *            of the carriage
+	 * @param goodsType
+	 *            that the carriage will hold
 	 */
-	public void addFreightCar(Integer grossWeight, String goodsType) {
+	private void addFreightCar(Integer grossWeight, String goodsType) {
 		try {
 			train.addCarriage(new FreightCar(grossWeight, goodsType));
-			canvasArray.add(addImage(Canvas.FREIGHTCAR));
-			
+			canvasArray.add(addImage(Canvas.FREIGHTCAR));// add graphic
+
 		} catch (TrainException e) {
 			displayText.append(e.getMessage() + "\n");
 		}
 	}
-	
-	/**Removes the last carriage in the array from the train
+
+	/**
+	 * Removes the last carriage in the array from the train
 	 * 
 	 */
-	public void removeCarriage() {
+	private void removeCarriage() {
 		try {
 			train.removeCarriage();
-			canvasArray.remove(canvasArray.size() - 1);
+			canvasArray.remove(canvasArray.size() - 1);// remove
 		} catch (TrainException e) {
 			displayText.append(e.getMessage() + "\n");
 		}
 	}
-	
-	/**Checks to see whether the total weight of the train is more than the locomotive engine power
+
+	/**
+	 * Checks to see whether the total weight of the train is more than the
+	 * locomotive engine power
 	 * 
 	 * @return true if train can move, false if not
 	 */
-	public String trainCanMove() {
+	private String trainCanMove() {
 		if (train.trainCanMove()) {
 			return "Train Can Move: Yes";
 		} else if (!train.trainCanMove()) {
@@ -479,11 +527,13 @@ public class GamePanel extends JFrame implements ActionListener {
 		return null;
 	}
 
-	/**Boards a given number of passengers to the passenger cars on the train
+	/**
+	 * Boards a given number of passengers to the passenger cars on the train
 	 * 
-	 * @param passengers to board
+	 * @param passengers
+	 *            to board
 	 */
-	public void boardPassengers(int passengers) {
+	private void boardPassengers(int passengers) {
 		try {
 			int leftOver;
 			leftOver = train.board(passengers);
@@ -492,38 +542,40 @@ public class GamePanel extends JFrame implements ActionListener {
 			passengersVsSeatsLabel.setText("Passengers/Seats: "
 					+ train.numberOnBoard() + "/" + train.numberOfSeats());
 			if (leftOver > 0 || train.numberOfSeats() == train.numberOnBoard()) {
-				setPanelState(boardingPanel, false);
+				setPanelState(boardingPanel, false);// disables boarding panel								
 			}
 		} catch (TrainException e) {
 			displayText.append(e.getMessage() + "\n");
 		}
 	}
-	
-	/**Creates a Canvas object containing a drawing responding to a given carriage type
+
+	/**
+	 * Creates a Canvas object containing a drawing responding to a given
+	 * carriage type
 	 * 
-	 * @param type of carriage to draw
+	 * @param type
+	 *            of carriage to draw
 	 * @return Canvas object
 	 */
-	public Canvas addImage(int type) {
-		Canvas guistuff = new Canvas();
-		
-		if (type == Canvas.LOCOMOTIVE){
-			guistuff.figure = Canvas.LOCOMOTIVE;
+	private Canvas addImage(int type) {
+		Canvas guiImage = new Canvas();
+
+		if (type == Canvas.LOCOMOTIVE) {
+			guiImage.figure = Canvas.LOCOMOTIVE;
+		} else if (type == Canvas.PASSENGERCAR) {
+			guiImage.figure = Canvas.PASSENGERCAR;
+		} else {
+			guiImage.figure = Canvas.FREIGHTCAR;
 		}
-		else if (type == Canvas.PASSENGERCAR) {
-			guistuff.figure = Canvas.PASSENGERCAR;
-		}
-		else {
-			guistuff.figure = Canvas.FREIGHTCAR;
-		}
-		guistuff.setPreferredSize( new Dimension( 100, 50 ) );
-		return guistuff;
+		guiImage.setPreferredSize(new Dimension(100, 50));
+		return guiImage;
 	}
-	
-	/**Updates components in the JPanel containing the graphical display
+
+	/**
+	 * Updates components in the JPanel containing the graphical display
 	 * 
 	 */
-	public void rePaintImagePanel() {
+	private void rePaintImagePanel() {
 		imagePanel.removeAll();
 		for (Canvas c : canvasArray) {
 			imagePanel.add(c);
