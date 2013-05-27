@@ -2,21 +2,24 @@ package asgn2RollingStock;
 
 import asgn2Exceptions.TrainException;
 
-/**Creates a rolling stock train of type Locomotive
+/**
+ * Creates a rolling stock train of type Locomotive
  * 
  * @author Wayne Maxwell
- *
+ * 
  */
 public class Locomotive extends RollingStock {
 
 	String classification;
 	Integer pullingPower;
 
-	/**Constructor sets up the engine type and weight of the train
+	/**
+	 * Constructor sets up the engine type and weight of the train
 	 * 
 	 * @param grossWeight
 	 * @param classification
-	 * @throws TrainException invalid classification entered or 0 or negative weight
+	 * @throws TrainException
+	 *             invalid classification entered or 0 or negative weight
 	 */
 	public Locomotive(Integer grossWeight, String classification)
 			throws TrainException {
@@ -69,7 +72,8 @@ public class Locomotive extends RollingStock {
 
 	}
 
-	/**Gets pulling power of locomotive
+	/**
+	 * Gets pulling power of locomotive
 	 * 
 	 * @return pulling power of locomotive
 	 */
@@ -78,8 +82,10 @@ public class Locomotive extends RollingStock {
 		return pullingPower;
 
 	}
-	
-	/**Returns a description of the rollingstock
+
+	/**
+	 * Returns a description of the rollingstock
+	 * 
 	 * @return string description
 	 */
 	@Override

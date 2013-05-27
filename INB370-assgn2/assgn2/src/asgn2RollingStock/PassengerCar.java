@@ -2,10 +2,11 @@ package asgn2RollingStock;
 
 import asgn2Exceptions.TrainException;
 
-/**Creates a rolling stock train of type Passenger Car
+/**
+ * Creates a rolling stock train of type Passenger Car
  * 
  * @author Wayne Maxwell
- *
+ * 
  */
 public class PassengerCar extends RollingStock {
 
@@ -95,7 +96,8 @@ public class PassengerCar extends RollingStock {
 		this.passengersOnboard = this.passengersOnboard - departingPassenger;
 	}
 
-	/**Gets the number or people on board
+	/**
+	 * Gets the number or people on board
 	 * 
 	 * @return number of people on board train
 	 */
@@ -103,7 +105,8 @@ public class PassengerCar extends RollingStock {
 		return this.passengersOnboard;
 	}
 
-	/**Gets number of seats on train
+	/**
+	 * Gets number of seats on train
 	 * 
 	 * @return number of seats on train
 	 */

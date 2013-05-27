@@ -542,7 +542,7 @@ public class GamePanel extends JFrame implements ActionListener {
 			passengersVsSeatsLabel.setText("Passengers/Seats: "
 					+ train.numberOnBoard() + "/" + train.numberOfSeats());
 			if (leftOver > 0 || train.numberOfSeats() == train.numberOnBoard()) {
-				setPanelState(boardingPanel, false);// disables boarding panel								
+				setPanelState(boardingPanel, false);// disables boarding panel
 			}
 		} catch (TrainException e) {
 			displayText.append(e.getMessage() + "\n");
