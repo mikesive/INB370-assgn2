@@ -15,6 +15,11 @@ import asgn2RollingStock.FreightCar;
 import asgn2RollingStock.Locomotive;
 import asgn2RollingStock.PassengerCar;
 
+/**
+ * 
+ * @author Michael Sive
+ *
+ */
 public class RollingStockTests {
 
 	PassengerCar testPassengerCar;

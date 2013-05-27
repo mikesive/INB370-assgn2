@@ -10,6 +10,11 @@ import asgn2RollingStock.Locomotive;
 import asgn2RollingStock.PassengerCar;
 import asgn2Train.DepartingTrain;
 
+/**
+ * 
+ * @author Wayne Maxwell
+ *
+ */
 public class TrainTests {
 
 	private DepartingTrain testTrain = new DepartingTrain();
