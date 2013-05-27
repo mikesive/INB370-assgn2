@@ -465,6 +465,8 @@ public class GamePanel extends JFrame implements ActionListener {
 			imagePanel.add(c);
 			c.repaint();
 		}
+		imagePanel.revalidate();
+		imagePanel.repaint();
 	}
 
 	public static void main(String[] args) {
