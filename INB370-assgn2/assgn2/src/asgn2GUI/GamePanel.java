@@ -27,8 +27,10 @@ import asgn2Train.DepartingTrain;
 
 public class GamePanel extends JFrame implements ActionListener {
 
-	/**
-	 * 
+	/**This class creates a Graphical User Interface to build a train consisting of different
+	 * carriage types, and to board passengers.
+	 * @author Wayne Maxwell
+	 * @author Michael Sive
 	 */
 	private static final long serialVersionUID = 1L;
 
@@ -260,6 +262,9 @@ public class GamePanel extends JFrame implements ActionListener {
 		newGame();
 	}
 
+	/**Sets up default text in panels, initializes train object, greys out panels.
+	 * 
+	 */
 	public void newGame() {
 		train = new DepartingTrain();
 		displayText.setText("");
@@ -279,6 +284,11 @@ public class GamePanel extends JFrame implements ActionListener {
 		evaluatePanelStates();
 	}
 
+	/**Sets all components in a given panel to a given state.
+	 * 
+	 * @param panel
+	 * @param enabled
+	 */
 	private void setPanelState(JPanel panel, Boolean enabled) {
 		Component[] components = panel.getComponents();
 		for (Component c : components) {
@@ -286,9 +296,15 @@ public class GamePanel extends JFrame implements ActionListener {
 		}	
 	}
 	
+	/**Attempts one of every action. If an exception is thrown, the action button is greyed out in the GamePanel,
+	 * to prevent the user from being able to cause exceptions. The action is always reversed if it is successful.
+	 * 
+	 */
 	public void evaluatePanelStates() {
+		//Sets locomotivePanel state
 		setPanelState(locomotivePanel, train.firstCarriage() == null );
-
+		
+		//Attempts to add and remove passenger car
 		try {
 			train.addCarriage(new PassengerCar(100, 100));
 			train.removeCarriage();
@@ -298,7 +314,8 @@ public class GamePanel extends JFrame implements ActionListener {
 		catch (Exception e) {
 			setPanelState(passengerCarPanel, false);
 		}
-
+		
+		//Attempts to add and remove freight car
 		try {
 			train.addCarriage(new FreightCar(100, GENERALSTRING));
 			train.removeCarriage();
@@ -308,6 +325,8 @@ public class GamePanel extends JFrame implements ActionListener {
 		catch (Exception e) {
 			setPanelState(freightCarPanel, false);
 		}
+		
+		//Enables or disables removeCarriage as necessary
 		if (train.firstCarriage() instanceof RollingStock && train.numberOnBoard() == 0) {
 			removeCarriage.setEnabled(true);
 		}
@@ -316,6 +335,9 @@ public class GamePanel extends JFrame implements ActionListener {
 		}
 	}
 
+	/**Action Listener for each button in the GamePanel.
+	 * 
+	 */
 	public void actionPerformed(ActionEvent evt) {
 		Object src = evt.getSource();
 		try {
@@ -342,14 +364,23 @@ public class GamePanel extends JFrame implements ActionListener {
 			}
 			evaluatePanelStates();
 			rePaintImagePanel();
+			if (train.firstCarriage() != null) {
 			displayText.append("Train Configuration: " + train.toString()
 					+ "\n");
 			canTrainMoveLabel.setText(trainCanMove());
+			}
+			if (train.firstCarriage() == null) {
+				canTrainMoveLabel.setText("Train Can Move: ");
+			}
 		} catch (IllegalArgumentException e) {
 			displayText.append("Please submit attributes for the carriage.\n");
 		}
 	}
 
+	/**Returns the first letter of the locomotive type selected in the dropdown menu
+	 * 
+	 * @return string corresponding to dropdown option selected in locomotiveEngineTypeSelect
+	 */
 	public String getLocomotiveString() {
 
 		if (locomotiveEngineTypeSelect.getSelectedIndex() == ELECTRIC) {
@@ -363,6 +394,10 @@ public class GamePanel extends JFrame implements ActionListener {
 		return null;
 	}
 
+	/**Returns the first letter of the freight type selected in the dropdown menu
+	 * 
+	 * @return string corresponding to dropdown option selected in freightTypeSelect
+	 */
 	public String getFreightString() {
 
 		if (freightTypeSelect.getSelectedIndex() == GENERAL) {
@@ -386,6 +421,11 @@ public class GamePanel extends JFrame implements ActionListener {
 		}
 	}
 
+	/**Adds a passenger car with the given parameters to the train array
+	 * 
+	 * @param grossWeight of the carriage
+	 * @param numberOfSeats on board the carriage
+	 */
 	public void addPassengerCar(Integer grossWeight, Integer numberOfSeats) {
 		try {
 			train.addCarriage(new PassengerCar(grossWeight, numberOfSeats));
@@ -399,6 +439,11 @@ public class GamePanel extends JFrame implements ActionListener {
 		}
 	}
 
+	/**Adds a freight car with the given parameters to the train array
+	 * 
+	 * @param grossWeight of the carriage
+	 * @param goodsType that the carriage will hold
+	 */
 	public void addFreightCar(Integer grossWeight, String goodsType) {
 		try {
 			train.addCarriage(new FreightCar(grossWeight, goodsType));
@@ -408,7 +453,10 @@ public class GamePanel extends JFrame implements ActionListener {
 			displayText.append(e.getMessage() + "\n");
 		}
 	}
-
+	
+	/**Removes the last carriage in the array from the train
+	 * 
+	 */
 	public void removeCarriage() {
 		try {
 			train.removeCarriage();
@@ -417,7 +465,11 @@ public class GamePanel extends JFrame implements ActionListener {
 			displayText.append(e.getMessage() + "\n");
 		}
 	}
-
+	
+	/**Checks to see whether the total weight of the train is more than the locomotive engine power
+	 * 
+	 * @return true if train can move, false if not
+	 */
 	public String trainCanMove() {
 		if (train.trainCanMove()) {
 			return "Train Can Move: Yes";
@@ -427,6 +479,10 @@ public class GamePanel extends JFrame implements ActionListener {
 		return null;
 	}
 
+	/**Boards a given number of passengers to the passenger cars on the train
+	 * 
+	 * @param passengers to board
+	 */
 	public void boardPassengers(int passengers) {
 		try {
 			int leftOver;
@@ -443,6 +499,11 @@ public class GamePanel extends JFrame implements ActionListener {
 		}
 	}
 	
+	/**Creates a Canvas object containing a drawing responding to a given carriage type
+	 * 
+	 * @param type of carriage to draw
+	 * @return Canvas object
+	 */
 	public Canvas addImage(int type) {
 		Canvas guistuff = new Canvas();
 		
@@ -459,6 +520,9 @@ public class GamePanel extends JFrame implements ActionListener {
 		return guistuff;
 	}
 	
+	/**Updates components in the JPanel containing the graphical display
+	 * 
+	 */
 	public void rePaintImagePanel() {
 		imagePanel.removeAll();
 		for (Canvas c : canvasArray) {
